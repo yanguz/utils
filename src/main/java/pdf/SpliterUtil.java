@@ -23,9 +23,9 @@ import com.lowagie.text.pdf.SimpleBookmark;
 public class SpliterUtil {
 
 	// 分页码
-	private static List<Integer> pages = new ArrayList<Integer>();
+	private static List<Integer> pages = null;
 	// 标题
-	private static List<String> titles = new ArrayList<String>();
+	private static List<String> titles = null;
 	private static PdfReader reader = null;
 	// 输入pdf全路径文件名
 	private static String pdfFile = null;
@@ -39,8 +39,35 @@ public class SpliterUtil {
 	private static int bookmarkLevel = 1;
 
 	public static void main(String[] args) throws Exception {
-		pdfFile = "E:\\Book\\精通android4中文版.pdf";
-		bookmarkLevel = 2;
+		splitMultiFile("E:\\Book", 1);
+	}
+
+	public static void splitMultiFile(String dir, int level) {
+		File file = new File(dir);
+		if (file.isDirectory()) {
+			String[] fileNames = file.list();
+			if (fileNames != null && fileNames.length > 0) {
+				for (String fileName : fileNames) {
+					try {
+						String path = dir + File.separator + fileName;
+						File pdfFile = new File(path);
+						if (pdfFile.isFile()) {
+							splitSingle(path, level);
+						}
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	public static void splitSingle(String pdf, int level) throws Exception {
+		pdfFile = pdf;
+		bookmarkLevel = level;
+		System.out.println(pdfFile);
 		dir = pdfFile.substring(0, pdfFile.lastIndexOf(".")).trim();
 		// 创建输出目录
 		File file = new File(dir);
@@ -51,6 +78,8 @@ public class SpliterUtil {
 		count = reader.getNumberOfPages();
 		// 获取书签
 		List<Map<String, Object>> list = SimpleBookmark.getBookmark(reader);
+		pages = new ArrayList<Integer>();
+		titles = new ArrayList<String>();
 		// 从书签中获取分页信息
 		getPageInfo(list);
 		pages.add(count);
@@ -82,7 +111,21 @@ public class SpliterUtil {
 				if (page != null && !page.equalsIgnoreCase("null") && title != null && !title.equalsIgnoreCase("null")) {
 					page = page.split("[ ]")[0];
 					int start = Integer.valueOf(page);
-					title = title.replace("\r", "").replace("\n", "").replace("\t", "").replace("/", "").trim();
+					title = title.replaceAll("\r", "");
+					title = title.replaceAll("\n", "");
+					title = title.replaceAll("\t", "");
+					title = title.replaceAll("/", "");
+					title = title.replaceAll("\\\\", "");
+					title = title.replaceAll("\"", "");
+					title = title.replaceAll(":", "");
+					title = title.replaceAll("[<]", "");
+					title = title.replaceAll("[>]", "");
+					title = title.replaceAll("[|]", "");
+					title = title.replaceAll("[*]", "");
+					title = title.replaceAll("[?]", "");
+					title = title.replaceAll("？", "");
+					title = title.replaceAll("[.]", "");
+					title = title.trim();
 					pages.add(start);
 					titles.add(title);
 				}
