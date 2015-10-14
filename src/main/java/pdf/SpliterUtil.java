@@ -67,7 +67,6 @@ public class SpliterUtil {
 	public static void splitSingle(String pdf, int level) throws Exception {
 		pdfFile = pdf;
 		bookmarkLevel = level;
-		System.out.println(pdfFile);
 		dir = pdfFile.substring(0, pdfFile.lastIndexOf(".")).trim();
 		// 创建输出目录
 		File file = new File(dir);
@@ -78,8 +77,10 @@ public class SpliterUtil {
 		count = reader.getNumberOfPages();
 		// 获取书签
 		List<Map<String, Object>> list = SimpleBookmark.getBookmark(reader);
+		
 		pages = new ArrayList<Integer>();
 		titles = new ArrayList<String>();
+		bookmarkDeepIdx = 1;
 		// 从书签中获取分页信息
 		getPageInfo(list);
 		pages.add(count);
@@ -124,7 +125,6 @@ public class SpliterUtil {
 					title = title.replaceAll("[*]", "");
 					title = title.replaceAll("[?]", "");
 					title = title.replaceAll("？", "");
-					title = title.replaceAll("[.]", "");
 					title = title.trim();
 					pages.add(start);
 					titles.add(title);
