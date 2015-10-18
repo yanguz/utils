@@ -39,7 +39,7 @@ public class SpliterUtil {
 	private static int bookmarkLevel = 1;
 
 	public static void main(String[] args) throws Exception {
-		splitMultiFile("E:\\Book", 1);
+		splitMultiFile("F:\\Book", 2);
 	}
 
 	public static void splitMultiFile(String dir, int level) {
@@ -52,6 +52,7 @@ public class SpliterUtil {
 						String path = dir + File.separator + fileName;
 						File pdfFile = new File(path);
 						if (pdfFile.isFile()) {
+							System.out.println(path);
 							splitSingle(path, level);
 						}
 
