@@ -39,7 +39,7 @@ public class SpliterUtil {
 	private static int bookmarkLevel = 1;
 
 	public static void main(String[] args) throws Exception {
-		splitMultiFile("F:\\Book", 2);
+		splitMultiFile("E:\\MSTR安装及使用文档\\文档",1);
 	}
 
 	public static void splitMultiFile(String dir, int level) {
@@ -52,7 +52,6 @@ public class SpliterUtil {
 						String path = dir + File.separator + fileName;
 						File pdfFile = new File(path);
 						if (pdfFile.isFile()) {
-							System.out.println(path);
 							splitSingle(path, level);
 						}
 
@@ -78,7 +77,6 @@ public class SpliterUtil {
 		count = reader.getNumberOfPages();
 		// 获取书签
 		List<Map<String, Object>> list = SimpleBookmark.getBookmark(reader);
-		
 		pages = new ArrayList<Integer>();
 		titles = new ArrayList<String>();
 		bookmarkDeepIdx = 1;
